@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabs</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+
+        [role="tablist"] {
+            display: flex;
+            gap: 0.25rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        [role="tab"] {
+            border: none;
+            background: none;
+            padding: 0.6rem 1rem;
+            font: inherit;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            color: #555;
+        }
+
+        [role="tab"][aria-selected="true"] {
+            border-bottom-color: #2563eb;
+            color: #2563eb;
+        }
+
+        [role="tab"]:focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        [role="tabpanel"] { padding: 1rem 0; }
+    </style>
+</head>
+<body>
+<h1>Tabs</h1>
+
+<div class="tabs" data-tabs>
+    <div role="tablist" aria-label="Sample tabs">
+        <button role="tab" aria-selected="true" aria-controls="p1" id="t1" tabindex="0">First</button>
+        <button role="tab" aria-selected="false" aria-controls="p2" id="t2" tabindex="-1">Second</button>
+        <button role="tab" aria-selected="false" aria-controls="p3" id="t3" tabindex="-1">Third</button>
+    </div>
+    <div role="tabpanel" id="p1" aria-labelledby="t1">First panel content.</div>
+    <div role="tabpanel" id="p2" aria-labelledby="t2" hidden>Second panel content.</div>
+    <div role="tabpanel" id="p3" aria-labelledby="t3" hidden>Third panel content.</div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
