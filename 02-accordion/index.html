@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accordion</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+
+    .accordion { border-bottom: 1px solid #eee }
+    .accordion-trigger {
+      width: 100%;
+      text-align: left;
+      border: none;
+      background: none;
+      padding: 0.8rem 0;
+      font: inherit;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .accordion-trigger::after { content: '+' }
+    .accordion-trigger[aria-expanded="true"]::after { content: '-' }
+
+    .accordion-content {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.25s ease;
+    }
+    .accordion-content > div { padding: 0 0 0.8rem }
+  </style>
+</head>
+<body>
+
+<h1>Accordion</h1>
+
+<div class="accordion" data-accordion>
+  <div class="accordion-item">
+    <button class="accordion-trigger" aria-expanded="false">Question 1</button>
+    <div class="accordion-content"><div>Answer 1</div></div>
+  </div>
+  <div class="accordion-item">
+    <button class="accordion-trigger" aria-expanded="false">Question 2</button>
+    <div class="accordion-content"><div>Answer 2</div></div>
+  </div>
+  <div class="accordion-item">
+    <button class="accordion-trigger" aria-expanded="false">Question 3</button>
+    <div class="accordion-content"><div>Answer 3</div></div>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

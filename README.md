@@ -1,2 +1,11 @@
-# vanilla-js-sprints
-17 Vanilla JS components and apps, built from scratch, drilled from memory
+# Vanilla JavaScript Sprints
+
+## Phase 1 - DOM, events, ARIA-as-state
+
+1. Tabs
+
+2. Accordion
+3. Temperature Converter
+4. Restricted Textarea
+5. Age Calculator
+6. Cookie Consent
