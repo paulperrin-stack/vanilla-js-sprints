@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Temperature Converter - Sprint</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+
+        .converter { display: flex; flex-direction: column; gap: 1rem; }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+        .field:last-child { border-bottom: none; }
+
+        .field label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05rem;
+            text-transform: uppercase;
+            color: #888;
+        }
+
+        .field-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .field input[type="number"] {
+            flex: 1;
+            border: none;
+            border-bottom: 2px solid #eee;
+            padding: 0.5rem 0;
+            font: inherit;
+            font-size: 1.5rem;
+            outline: none;
+            color: #111;
+            background: transparent;
+            transition: border-color 0.15s;
+            -moz-appearance: textfield;
+        }
+        .field input[type="number"]::-webkit-outer-spin-button,
+        .field input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        .field input[type="number"]:focus { border-bottom-color: #2563eb; }
+        .field input[type="number"].active { border-bottom-color: #2563eb; color: #2563eb; }
+
+        .field-unit {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #aaa;
+            min-width: 2ch;
+        }
+
+        .reset-btn {
+            align-self: flex-start;
+            border: 1px solid #eee;
+            background: none;
+            padding: 0.4rem 0.9rem;
+            font: inherit;
+            font-size: 0.875rem;
+            cursor: pointer;
+            color: #555;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            transition: background-color 0.15s, color 0.15s;
+        }
+
+        .reset-btn:hover { background: #f5f5f5; }
+        .reset-btn:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+    </style>
+</head>
+<body>
+<h1>Temperature Converter</h1>
+<div class="converter" data-converter>
+    <div class="field">
+        <label for="celsius">Celsius</label>
+        <div class="field-row">
+            <input type="number" id="celsius" data-unit="c" placeholder="0" step="any" />
+            <span class="field-unit">°C</span>
+        </div>
+    </div>
+    <div class="field">
+        <label for="fahrenheit">Fahrenheit</label>
+        <div class="field-row">
+            <input type="number" id="fahrenheit" data-unit="f" placeholder="32" step="any" />
+            <span class="field-unit">°F</span>
+        </div>
+    </div>
+    <div class="field">
+        <label for="kelvin">Kelvin</label>
+        <div class="field-row">
+            <input type="number" id="kelvin" data-unit="k" placeholder="273.15" step="any" />
+            <span class="field-unit">K</span>
+        </div>
+    </div>
+    <button class="reset-btn" data-reset>Reset</button>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
