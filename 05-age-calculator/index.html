@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sprint 4 — Age Calculator</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+
+        .dob-row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .field { display: flex; flex-direction: column; gap: 0.3rem; }
+        .field.day   { flex: 1; }
+        .field.month { flex: 1.6; }
+        .field.year  { flex: 2; }
+
+        .field label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #888;
+        }
+
+        .field input {
+            width: 100%;
+            border: none;
+            border-bottom: 2px solid #eee;
+            padding: 0.5rem 0;
+            font: inherit;
+            font-size: 1.5rem;
+            outline: none;
+            background: transparent;
+            color: #111;
+            transition: border-color 0.15s;
+        }
+        .field input:focus   { border-bottom-color: #2563eb; }
+        .field input.invalid { border-bottom-color: #ef4444; }
+        .field input.valid   { border-bottom-color: #22c55e; }
+
+        .field-hint {
+            font-size: 0.7rem;
+            color: #bbb;
+            min-height: 1em;
+            font-variant-numeric: tabular-nums;
+        }
+        .field-hint.warn { color: #ef4444; }
+
+        .error-msg {
+            font-size: 0.8rem;
+            color: #ef4444;
+            min-height: 1.1em;
+            margin-bottom: 0.75rem;
+        }
+
+        .calc-btn {
+            border: none;
+            background: #2563eb;
+            color: #fff;
+            padding: 0.6rem 1.4rem;
+            font: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+        .calc-btn:hover { background: #1d4ed8; }
+        .calc-btn:focus-visible { outline: 2px solid #2563eb; outline-offset: 3px; }
+
+        .result {
+            margin-top: 1.5rem;
+            border-top: 2px solid #eee;
+            padding-top: 1.25rem;
+            display: none;
+        }
+        .result.visible { display: block; }
+
+        .result-grid {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .result-card {
+            flex: 1;
+            min-width: 7rem;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 0.5rem;
+        }
+        .result-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2563eb;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+        .result-card .unit {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #888;
+            margin-top: 0.2rem;
+        }
+
+        .result-detail {
+            font-size: 0.875rem;
+            color: #555;
+            border-top: 1px solid #eee;
+            padding-top: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .result-detail span { color: #111; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<h1>Age Calculator</h1>
+
+<div class="age-calculator" data-age-calculator>
+
+    <div class="dob-row">
+        <div class="field day">
+            <label for="dob-day">Day</label>
+            <input id="dob-day"   data-part="day"   inputmode="numeric" placeholder="DD"   maxlength="2" />
+            <span class="field-hint" data-hint-day>1 – 31</span>
+        </div>
+        <div class="field month">
+            <label for="dob-month">Month</label>
+            <input id="dob-month" data-part="month" inputmode="numeric" placeholder="MM"   maxlength="2" />
+            <span class="field-hint" data-hint-month>1 – 12</span>
+        </div>
+        <div class="field year">
+            <label for="dob-year">Year</label>
+            <input id="dob-year"  data-part="year"  inputmode="numeric" placeholder="YYYY" maxlength="4" />
+            <span class="field-hint" data-hint-year>e.g. 1990</span>
+        </div>
+    </div>
+
+    <div class="error-msg" role="alert" aria-live="polite" data-error></div>
+
+    <button class="calc-btn" data-calculate>Calculate age</button>
+
+    <div class="result" role="region" aria-label="Your age" data-result>
+        <div class="result-grid">
+            <div class="result-card">
+                <div class="value" data-years>—</div>
+                <div class="unit">Years</div>
+            </div>
+            <div class="result-card">
+                <div class="value" data-months>—</div>
+                <div class="unit">Months</div>
+            </div>
+            <div class="result-card">
+                <div class="value" data-days>—</div>
+                <div class="unit">Days</div>
+            </div>
+        </div>
+        <div class="result-detail">
+            <div>Next birthday in <span data-next-birthday>—</span></div>
+            <div>Day you were born: <span data-weekday>—</span></div>
+            <div>Total days lived: <span data-total-days>—</span></div>
+        </div>
+    </div>
+
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
