@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Dropdown</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      body { font-family: system-ui, sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+
+      /* ── dropdown wrapper ───────────────────────────── */
+      .dropdown {
+        position: relative;
+        width: 100%;
+        max-width: 320px;
+        user-select: none;
+      }
+
+      /* ── trigger ────────────────────────────────────── */
+      .dropdown-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        border: none;
+        border-bottom: 2px solid #eee;
+        background: transparent;
+        padding: 0.5rem 0;
+        font: inherit;
+        font-size: 1.25rem;
+        color: #111;
+        cursor: pointer;
+        width: 100%;
+        text-align: left;
+        transition: border-color 0.15s;
+      }
+      .dropdown-trigger:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+      .dropdown-trigger:hover,
+      .dropdown-trigger[aria-expanded="true"] { border-bottom-color: #2563eb; }
+
+      .dropdown-trigger .trigger-text { flex: 1; }
+      .dropdown-trigger .trigger-text.placeholder { color: #aaa; }
+
+      .dropdown-trigger .chevron {
+        font-size: 0.7rem;
+        color: #aaa;
+        transition: transform 0.2s;
+        flex-shrink: 0;
+      }
+      .dropdown-trigger[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+
+      /* ── list ───────────────────────────────────────── */
+      .dropdown-list {
+        position: absolute;
+        top: calc(100% + 0.35rem);
+        left: 0;
+        right: 0;
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        padding: 0.3rem 0;
+        margin: 0;
+        list-style: none;
+        z-index: 100;
+
+        /* animate in */
+        opacity: 0;
+        transform: translateY(-6px);
+        pointer-events: none;
+        transition: opacity 0.15s, transform 0.15s;
+      }
+      .dropdown-list.open {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      /* ── option ─────────────────────────────────────── */
+      .dropdown-option {
+        padding: 0.55rem 0.9rem;
+        font-size: 1rem;
+        color: #333;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        border-radius: 4px;
+        margin: 0 0.3rem;
+        transition: background 0.1s;
+      }
+      .dropdown-option:hover,
+      .dropdown-option.focused  { background: #eff6ff; color: #2563eb; }
+      .dropdown-option.selected { font-weight: 600; color: #2563eb; }
+      .dropdown-option .check   { font-size: 0.8rem; opacity: 0; }
+      .dropdown-option.selected .check { opacity: 1; }
+
+      /* ── selected value display ─────────────────────── */
+      .dropdown-value {
+        margin-top: 1.5rem;
+        border-top: 2px solid #eee;
+        padding-top: 1rem;
+        font-size: 0.875rem;
+        color: #555;
+        display: none;
+      }
+      .dropdown-value.visible { display: block; }
+      .dropdown-value span { font-weight: 600; color: #111; }
+    </style>
+</head>
+<body>
+
+<h1>Custom Dropdown</h1>
+
+<!-- ── declarative: options live in data-options ─────────── -->
+<div class="dropdown" data-dropdown
+     data-placeholder="Select a country…"
+     data-options='[
+    "Afghanistan", "Australia", "Brazil",
+    "Canada", "China", "Egypt",
+    "France", "Germany", "India",
+    "Japan", "Mexico", "Nigeria",
+    "South Korea", "United Kingdom", "United States"
+  ]'>
+</div>
+
+<div class="dropdown-value" data-selected-display>
+  Selected: <span></span>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
