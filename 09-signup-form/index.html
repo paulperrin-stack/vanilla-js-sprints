@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sprint 8 — Sign-up Form</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; max-width: 460px; margin: 2rem auto; padding: 0 1rem; }
+
+        h1 { margin-bottom: 0.25rem; }
+        .subtitle { color: #888; font-size: 0.9rem; margin-bottom: 2rem; }
+        .subtitle a { color: #2563eb; text-decoration: none; }
+        .subtitle a:hover { text-decoration: underline; }
+
+        /* ── field ──────────────────────────────────────── */
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .field label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #888;
+        }
+
+        .input-wrap { position: relative; }
+
+        .field input {
+            width: 100%;
+            border: none;
+            border-bottom: 2px solid #eee;
+            padding: 0.5rem 2rem 0.5rem 0;
+            font: inherit;
+            font-size: 1.1rem;
+            outline: none;
+            background: transparent;
+            color: #111;
+            transition: border-color 0.15s;
+        }
+        .field input:focus            { border-bottom-color: #2563eb; }
+        .field input.invalid          { border-bottom-color: #ef4444; }
+        .field input.valid            { border-bottom-color: #22c55e; }
+
+        /* password toggle eye */
+        .eye-btn {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #aaa;
+            padding: 0.2rem;
+            line-height: 1;
+            transition: color 0.15s;
+        }
+        .eye-btn:hover        { color: #555; }
+        .eye-btn:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; border-radius: 3px; }
+
+        /* field-level hint / error */
+        .field-hint {
+            font-size: 0.75rem;
+            color: #bbb;
+            min-height: 1em;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .field-hint.error { color: #ef4444; }
+        .field-hint.ok    { color: #22c55e; }
+
+        /* ── password strength bar ──────────────────────── */
+        .strength-bar {
+            display: flex;
+            gap: 3px;
+            margin-top: 0.4rem;
+        }
+        .strength-bar .seg {
+            flex: 1;
+            height: 3px;
+            border-radius: 999px;
+            background: #eee;
+            transition: background 0.2s;
+        }
+        .strength-bar[data-strength="1"] .seg:nth-child(1)                          { background: #ef4444; }
+        .strength-bar[data-strength="2"] .seg:nth-child(-n+2)                       { background: #f59e0b; }
+        .strength-bar[data-strength="3"] .seg:nth-child(-n+3)                       { background: #3b82f6; }
+        .strength-bar[data-strength="4"] .seg                                        { background: #22c55e; }
+
+        .strength-label {
+            font-size: 0.72rem;
+            color: #aaa;
+            margin-top: 0.25rem;
+        }
+
+        /* ── two-col row ─────────────────────────────────── */
+        .row {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .row .field { flex: 1; }
+
+        /* ── submit ─────────────────────────────────────── */
+        .submit-btn {
+            width: 100%;
+            border: none;
+            background: #2563eb;
+            color: #fff;
+            padding: 0.7rem;
+            font: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            transition: background 0.15s, opacity 0.15s;
+        }
+        .submit-btn:hover        { background: #1d4ed8; }
+        .submit-btn:focus-visible { outline: 2px solid #2563eb; outline-offset: 3px; }
+        .submit-btn:disabled     { opacity: 0.5; cursor: not-allowed; }
+
+        /* ── success state ──────────────────────────────── */
+        .success-msg {
+            display: none;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+        .success-msg.visible { display: block; }
+        .success-msg .icon   { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .success-msg h2      { margin: 0 0 0.5rem; color: #111; }
+        .success-msg p       { color: #888; font-size: 0.9rem; margin: 0; }
+
+        .form-body.hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<h1>Create account</h1>
+<p class="subtitle">Already have one? <a href="#">Sign in</a></p>
+
+<div data-signup>
+
+    <div class="form-body">
+        <div class="row">
+            <div class="field">
+                <label for="s-firstname">First name</label>
+                <div class="input-wrap">
+                    <input id="s-firstname" type="text" autocomplete="given-name"
+                           placeholder="Jane" data-validate="name" />
+                </div>
+                <span class="field-hint" data-hint="s-firstname"></span>
+            </div>
+            <div class="field">
+                <label for="s-lastname">Last name</label>
+                <div class="input-wrap">
+                    <input id="s-lastname" type="text" autocomplete="family-name"
+                           placeholder="Doe" data-validate="name" />
+                </div>
+                <span class="field-hint" data-hint="s-lastname"></span>
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="s-email">Email</label>
+            <div class="input-wrap">
+                <input id="s-email" type="text" autocomplete="email"
+                       placeholder="jane@example.com" data-validate="email" />
+            </div>
+            <span class="field-hint" data-hint="s-email"></span>
+        </div>
+
+        <div class="field">
+            <label for="s-password">Password</label>
+            <div class="input-wrap">
+                <input id="s-password" type="password" autocomplete="new-password"
+                       placeholder="Min. 8 characters" data-validate="password" />
+                <button class="eye-btn" type="button" data-toggle-eye="s-password"
+                        aria-label="Show password">👁</button>
+            </div>
+            <div class="strength-bar" data-strength="0">
+                <div class="seg"></div><div class="seg"></div>
+                <div class="seg"></div><div class="seg"></div>
+            </div>
+            <div class="strength-label" data-strength-label></div>
+            <span class="field-hint" data-hint="s-password"></span>
+        </div>
+
+        <div class="field">
+            <label for="s-confirm">Confirm password</label>
+            <div class="input-wrap">
+                <input id="s-confirm" type="password" autocomplete="new-password"
+                       placeholder="Repeat your password" data-validate="confirm" />
+                <button class="eye-btn" type="button" data-toggle-eye="s-confirm"
+                        aria-label="Show password">👁</button>
+            </div>
+            <span class="field-hint" data-hint="s-confirm"></span>
+        </div>
+
+        <button class="submit-btn" data-submit>Create account</button>
+    </div>
+
+    <div class="success-msg" data-success>
+        <div class="icon">🎉</div>
+        <h2>You're in!</h2>
+        <p>Account created successfully. Welcome aboard.</p>
+    </div>
+
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
