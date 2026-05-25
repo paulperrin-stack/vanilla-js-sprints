@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modal</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      body { font-family: system-ui, sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+
+      /* ── trigger buttons (demo) ─────────────────────── */
+      .demo-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+      .btn {
+        border: none;
+        padding: 0.55rem 1.1rem;
+        font: inherit;
+        font-size: 0.9rem;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background 0.15s;
+      }
+      .btn:focus-visible { outline: 2px solid #2563eb; outline-offset: 3px; }
+      .btn-primary   { background: #2563eb; color: #fff; }
+      .btn-primary:hover  { background: #1d4ed8; }
+      .btn-secondary { background: #f3f4f6; color: #374151; }
+      .btn-secondary:hover { background: #e5e7eb; }
+      .btn-danger    { background: #ef4444; color: #fff; }
+      .btn-danger:hover   { background: #dc2626; }
+
+      /* ── overlay ────────────────────────────────────── */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        z-index: 200;
+
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+      }
+      .modal-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* ── modal box ──────────────────────────────────── */
+      .modal {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+        width: 100%;
+        max-width: 460px;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+
+        transform: translateY(12px) scale(0.98);
+        transition: transform 0.2s;
+      }
+      .modal-overlay.open .modal {
+        transform: translateY(0) scale(1);
+      }
+
+      /* ── header ─────────────────────────────────────── */
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.1rem 1.4rem 0.9rem;
+        border-bottom: 1px solid #eee;
+      }
+      .modal-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #111;
+        margin: 0;
+      }
+      .modal-close {
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+        color: #aaa;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        line-height: 1;
+        transition: color 0.15s, background 0.15s;
+      }
+      .modal-close:hover        { color: #111; background: #f3f4f6; }
+      .modal-close:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+
+      /* ── body ───────────────────────────────────────── */
+      .modal-body {
+        padding: 1.2rem 1.4rem;
+        font-size: 0.925rem;
+        color: #555;
+        line-height: 1.6;
+        flex: 1;
+      }
+
+      /* ── footer ─────────────────────────────────────── */
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        padding: 0.9rem 1.4rem 1.1rem;
+        border-top: 1px solid #eee;
+      }
+    </style>
+    </head>
+<body>
+
+<h1>Modal</h1>
+
+<!-- ── demo triggers ─────────────────────────────────────── -->
+<div class="demo-btns">
+  <button class="btn btn-primary"   data-modal-open="modal-info">Info modal</button>
+  <button class="btn btn-secondary" data-modal-open="modal-form">Form modal</button>
+  <button class="btn btn-danger"    data-modal-open="modal-confirm">Confirm modal</button>
+</div>
+
+<!-- ── info modal ────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-info" role="dialog"
+     aria-modal="true" aria-labelledby="modal-info-title" data-modal>
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-info-title">What are modals?</h2>
+      <button class="modal-close" aria-label="Close" data-modal-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <p>A modal is a dialog box that appears on top of the main content, temporarily blocking interaction with the rest of the page until it is dismissed.</p>
+      <p>They are commonly used for alerts, confirmations, forms, or displaying additional information without navigating away.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" data-modal-close>Got it</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── form modal ────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-form" role="dialog"
+     aria-modal="true" aria-labelledby="modal-form-title" data-modal>
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-form-title">Edit profile</h2>
+      <button class="modal-close" aria-label="Close" data-modal-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+
+        <div style="display:flex;flex-direction:column;gap:0.3rem;">
+          <label for="f-name" style="font-size:0.75rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#888;">Name</label>
+          <input id="f-name" type="text" placeholder="Jane Doe"
+                 style="border:none;border-bottom:2px solid #eee;padding:0.4rem 0;font:inherit;font-size:1rem;outline:none;background:transparent;transition:border-color 0.15s;"
+                 onfocus="this.style.borderBottomColor='#2563eb'"
+                 onblur="this.style.borderBottomColor='#eee'" />
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.3rem;">
+          <label for="f-email" style="font-size:0.75rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#888;">Email</label>
+          <input id="f-email" type="email" placeholder="jane@example.com"
+                 style="border:none;border-bottom:2px solid #eee;padding:0.4rem 0;font:inherit;font-size:1rem;outline:none;background:transparent;transition:border-color 0.15s;"
+                 onfocus="this.style.borderBottomColor='#2563eb'"
+                 onblur="this.style.borderBottomColor='#eee'" />
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Cancel</button>
+      <button class="btn btn-primary"   data-modal-close>Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── confirm modal ─────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-confirm" role="dialog"
+     aria-modal="true" aria-labelledby="modal-confirm-title" data-modal>
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-confirm-title">Delete item?</h2>
+      <button class="modal-close" aria-label="Close" data-modal-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <p>This action <strong style="color:#ef4444;">cannot be undone.</strong> The item will be permanently removed.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-modal-close>Cancel</button>
+      <button class="btn btn-danger"    data-modal-close>Yes, delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
