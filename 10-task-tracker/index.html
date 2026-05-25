@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sprint 9 — Task Tracker</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+
+    /* ── add row ─────────────────────────────────────── */
+    .add-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-end;
+      margin-bottom: 1.75rem;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 1.25rem;
+    }
+
+    .add-row input {
+      flex: 1;
+      border: none;
+      border-bottom: 2px solid #eee;
+      padding: 0.5rem 0;
+      font: inherit;
+      font-size: 1.1rem;
+      outline: none;
+      background: transparent;
+      color: #111;
+      transition: border-color 0.15s;
+    }
+    .add-row input::placeholder { color: #bbb; }
+    .add-row input:focus        { border-bottom-color: #2563eb; }
+
+    .btn-add {
+      border: none;
+      background: #2563eb;
+      color: #fff;
+      padding: 0.5rem 1.1rem;
+      font: inherit;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border-radius: 4px;
+      white-space: nowrap;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .btn-add:hover         { background: #1d4ed8; }
+    .btn-add:focus-visible { outline: 2px solid #2563eb; outline-offset: 3px; }
+
+    /* ── filter tabs ─────────────────────────────────── */
+    .filters {
+      display: flex;
+      gap: 0.25rem;
+      border-bottom: 2px solid #eee;
+      margin-bottom: 1rem;
+    }
+
+    .filter-btn {
+      border: none;
+      background: none;
+      padding: 0.5rem 0.9rem;
+      font: inherit;
+      font-size: 0.875rem;
+      cursor: pointer;
+      color: #888;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .filter-btn:hover          { color: #2563eb; }
+    .filter-btn.active         { color: #2563eb; border-bottom-color: #2563eb; font-weight: 600; }
+    .filter-btn:focus-visible  { outline: 2px solid #2563eb; outline-offset: 2px; }
+
+    .filter-btn .count {
+      display: inline-block;
+      background: #f3f4f6;
+      color: #555;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 0.05em 0.45em;
+      margin-left: 0.3rem;
+      vertical-align: middle;
+    }
+    .filter-btn.active .count { background: #dbeafe; color: #2563eb; }
+
+    /* ── task list ───────────────────────────────────── */
+    .task-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    /* ── task item ───────────────────────────────────── */
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0.5rem;
+      border-bottom: 1px solid #f3f4f6;
+      border-radius: 4px;
+      transition: background 0.1s;
+      animation: slide-in 0.18s ease;
+    }
+    .task-item:hover { background: #fafafa; }
+
+    @keyframes slide-in {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* checkbox */
+    .task-check {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 1.15rem;
+      height: 1.15rem;
+      border: 2px solid #d1d5db;
+      border-radius: 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .task-check:checked {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+    .task-check:checked::after {
+      content: '';
+      position: absolute;
+      left: 3px; top: 0px;
+      width: 5px; height: 9px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+    .task-check:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+
+    /* label / text */
+    .task-text {
+      flex: 1;
+      font-size: 1rem;
+      color: #111;
+      word-break: break-word;
+      cursor: pointer;
+      outline: none;
+    }
+    .task-item.done .task-text {
+      color: #aaa;
+      text-decoration: line-through;
+    }
+
+    /* inline edit */
+    .task-text[contenteditable="true"] {
+      border-bottom: 2px solid #2563eb;
+      color: #111;
+      text-decoration: none;
+      cursor: text;
+    }
+
+    /* delete button */
+    .btn-delete {
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: #ddd;
+      font-size: 1rem;
+      padding: 0.2rem 0.3rem;
+      border-radius: 4px;
+      line-height: 1;
+      flex-shrink: 0;
+      transition: color 0.15s, background 0.15s;
+    }
+    .task-item:hover .btn-delete { color: #f87171; }
+    .btn-delete:hover             { background: #fef2f2; color: #ef4444 !important; }
+    .btn-delete:focus-visible     { outline: 2px solid #ef4444; outline-offset: 2px; }
+
+    /* ── empty state ─────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: #bbb;
+      font-size: 0.9rem;
+      display: none;
+    }
+    .empty-state .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .empty-state.visible { display: block; }
+
+    /* ── footer ──────────────────────────────────────── */
+    .task-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: #aaa;
+      padding-top: 0.75rem;
+      border-top: 1px solid #eee;
+      min-height: 2rem;
+    }
+
+    .btn-clear {
+      border: none;
+      background: none;
+      font: inherit;
+      font-size: 0.8rem;
+      color: #f87171;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.15s;
+    }
+    .btn-clear:hover         { color: #ef4444; }
+    .btn-clear:focus-visible { outline: 2px solid #ef4444; outline-offset: 2px; }
+    .btn-clear:disabled      { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+<h1>Task Tracker</h1>
+
+<div data-task-tracker>
+
+  <!-- add -->
+  <div class="add-row">
+    <input type="text" data-input placeholder="Add a new task…" maxlength="200" />
+    <button class="btn-add" data-add>Add task</button>
+  </div>
+
+  <!-- filters -->
+  <div class="filters" role="tablist" aria-label="Filter tasks">
+    <button class="filter-btn active" role="tab" aria-selected="true"
+            data-filter="all">All <span class="count" data-count="all">0</span></button>
+    <button class="filter-btn" role="tab" aria-selected="false"
+            data-filter="pending">Pending <span class="count" data-count="pending">0</span></button>
+    <button class="filter-btn" role="tab" aria-selected="false"
+            data-filter="done">Done <span class="count" data-count="done">0</span></button>
+  </div>
+
+  <!-- list -->
+  <ul class="task-list" data-list aria-label="Tasks" aria-live="polite"></ul>
+
+  <!-- empty -->
+  <div class="empty-state" data-empty>
+    <div class="icon">📋</div>
+    <div data-empty-msg>No tasks yet. Add one above.</div>
+  </div>
+
+  <!-- footer -->
+  <div class="task-footer">
+    <span data-summary></span>
+    <button class="btn-clear" data-clear-done disabled>Clear completed</button>
+  </div>
+
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>
