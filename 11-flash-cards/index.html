@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 480px; margin: 3rem auto; padding: 0 1rem; }
+ 
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            min-height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            user-select: none;
+            background: #fff;
+            transition: background 0.2s;
+        }
+ 
+        .card:hover { background: #f9f9f9; }
+        .card.answer { background: #f0f7ff; }
+ 
+        .controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+ 
+        button {
+            border: 1px solid #ccc;
+            background: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font: inherit;
+            cursor: pointer;
+        }
+ 
+        button:hover { background: #f0f0f0; }
+        button:disabled { opacity: 0.4; cursor: default; }
+ 
+        .counter { color: #888; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    
+    <h1>Flashcards</h1>
+
+    <div class="card" id="card" role="button" tabindex="0">Click to start</div>
+
+    <div class="controls">
+        <button id="btnPrev" disabled>←</button>
+        <span class="counter" id="counter"></span>
+        <button id="btnNext" disabled>→</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
