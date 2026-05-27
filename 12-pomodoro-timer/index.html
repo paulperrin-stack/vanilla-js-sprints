@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 360px; margin: 3rem auto; padding: 0 1rem; text-align: center; }
+ 
+        .modes {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+ 
+        button {
+            border: 1px solid #ccc;
+            background: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font: inherit;
+            cursor: pointer;
+        }
+ 
+        button:hover { background: #f0f0f0; }
+ 
+        .modes button[aria-pressed="true"] {
+            background: #222;
+            color: #fff;
+            border-color: #222;
+        }
+ 
+        .timer {
+            font-size: 5rem;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.05em;
+            margin: 1rem 0;
+        }
+ 
+        .controls { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem; }
+ 
+        .label { color: #888; font-size: 0.85rem; margin-top: 1.5rem; }
+    </style>
+</head>
+<body>
+    
+    <h1>Pomodoro Timer</h1>
+
+    <div class="modes">
+        <button id="btnPomodoro" aria-pressed="true">Pomodoro</button>
+        <button id="btnShort" aria-pressed="false">Short Break</button>
+        <button id="btnLong" aria-pressed="false">Long Break</button>
+    </div>
+
+    <div class="timer" id="timer">25:00</div>
+
+    <div class="controls">
+        <button id="btnStart">Start</button>
+        <button id="btnReset">Reset</button>
+    </div>
+
+    <p class="label" id="sessionLabel"></p>
+
+    <script src="script.js"></script>
+</body>
+</html>
